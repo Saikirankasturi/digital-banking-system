@@ -60,7 +60,7 @@ public class AccountService {
         if (initialDeposit.compareTo(BigDecimal.ZERO) > 0) {
             recordLedgerEntry(
                     saved.getId(),
-                    "INITIAL_DEPOSIT_" + saved.getId(),
+                    "DEP-" + UUID.randomUUID(),
                     TransactionType.DEPOSIT,
                     initialDeposit,
                     BigDecimal.ZERO,

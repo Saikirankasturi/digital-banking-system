@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate;
 import java.math.BigDecimal;
 
 @Slf4j
-@Component
+@Component("transactionAccountClient")
 public class AccountClient {
 
     private final RestTemplate restTemplate;

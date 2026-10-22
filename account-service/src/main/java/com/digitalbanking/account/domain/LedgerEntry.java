@@ -24,7 +24,7 @@ public class LedgerEntry {
     @Column(name = "id", nullable = false, updatable = false, length = 36)
     private String id;
 
-    @Column(name = "transaction_id", nullable = false, length = 36)
+    @Column(name = "transaction_id", nullable = false, length = 64)
     private String transactionId;
 
     @Column(name = "account_id", nullable = false, length = 36)
