@@ -1,0 +1,28 @@
+server:
+  port: 8000
+
+spring:
+  application:
+    name: api-gateway
+
+  data:
+    redis:
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      timeout: 2000ms
+
+services:
+  transaction:
+    url: ${TRANSACTION_SERVICE_URL:http://localhost:8080}
+  account:
+    url: ${ACCOUNT_SERVICE_URL:http://localhost:8081}
+  fraud:
+    url: ${FRAUD_SERVICE_URL:http://localhost:8082}
+  notification:
+    url: ${NOTIFICATION_SERVICE_URL:http://localhost:8083}
+  payment:
+    url: ${PAYMENT_SERVICE_URL:http://localhost:8084}
+
+logging:
+  level:
+    com.digitalbanking: INFO
