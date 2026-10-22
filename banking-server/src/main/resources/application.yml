@@ -1,0 +1,50 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: digital-banking-system
+
+  datasource:
+    url: jdbc:h2:mem:bankingdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+  kafka:
+    bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    listener:
+      auto-startup: false
+
+services:
+  account:
+    url: http://localhost:${PORT:8080}
+  fraud:
+    url: http://localhost:${PORT:8080}
+  transaction:
+    url: http://localhost:${PORT:8080}
+  notification:
+    url: http://localhost:${PORT:8080}
+  payment:
+    url: http://localhost:${PORT:8080}
+
+logging:
+  level:
+    com.digitalbanking: INFO
+    org.springframework.kafka: ERROR

@@ -19,6 +19,7 @@
         <module>notification-service</module>
         <module>payment-service</module>
         <module>api-gateway</module>
+        <module>banking-server</module>
     </modules>
 
     <properties>
