@@ -36,6 +36,9 @@ spring:
 
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    producer:
+      properties:
+        max.block.ms: 1000
     listener:
       auto-startup: false
 

@@ -43,20 +43,20 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<AccountDto>> getAccount(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<AccountDto>> getAccount(@PathVariable("id") String id) {
         AccountDto account = accountService.getAccount(id);
         return ResponseEntity.ok(ApiResponse.success(account));
     }
 
     @GetMapping("/number/{accountNumber}")
-    public ResponseEntity<ApiResponse<AccountDto>> getAccountByNumber(@PathVariable String accountNumber) {
+    public ResponseEntity<ApiResponse<AccountDto>> getAccountByNumber(@PathVariable("accountNumber") String accountNumber) {
         AccountDto account = accountService.getAccountByNumber(accountNumber);
         return ResponseEntity.ok(ApiResponse.success(account));
     }
 
     @PostMapping("/{id}/debit")
     public ResponseEntity<ApiResponse<AccountDto>> debitAccount(
-            @PathVariable String id,
+            @PathVariable("id") String id,
             @RequestBody DebitCreditOperationRequest request) {
         AccountDto updated = accountService.debitAccount(
                 id, request.getAmount(), request.getTransactionId(), request.getSagaId(), request.getDescription());
@@ -65,7 +65,7 @@ public class AccountController {
 
     @PostMapping("/{id}/credit")
     public ResponseEntity<ApiResponse<AccountDto>> creditAccount(
-            @PathVariable String id,
+            @PathVariable("id") String id,
             @RequestBody DebitCreditOperationRequest request) {
         AccountDto updated = accountService.creditAccount(
                 id, request.getAmount(), request.getTransactionId(), request.getSagaId(), request.getDescription());
@@ -74,7 +74,7 @@ public class AccountController {
 
     @PostMapping("/{id}/compensate")
     public ResponseEntity<ApiResponse<AccountDto>> compensateDebit(
-            @PathVariable String id,
+            @PathVariable("id") String id,
             @RequestBody DebitCreditOperationRequest request) {
         AccountDto updated = accountService.compensateDebit(
                 id, request.getAmount(), request.getTransactionId(), request.getSagaId(), request.getDescription());
@@ -82,7 +82,7 @@ public class AccountController {
     }
 
     @GetMapping("/{id}/ledger")
-    public ResponseEntity<ApiResponse<List<LedgerEntry>>> getLedger(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<List<LedgerEntry>>> getLedger(@PathVariable("id") String id) {
         List<LedgerEntry> entries = accountService.getAccountLedger(id);
         return ResponseEntity.ok(ApiResponse.success(entries));
     }

@@ -38,6 +38,8 @@ spring:
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        max.block.ms: 1000
     consumer:
       group-id: transaction-service-group
       auto-offset-reset: earliest

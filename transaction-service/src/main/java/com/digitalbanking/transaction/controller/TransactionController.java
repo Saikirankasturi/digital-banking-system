@@ -45,7 +45,7 @@ public class TransactionController {
 
     @PostMapping("/{transactionId}/verify-otp")
     public ResponseEntity<ApiResponse<TransferResponse>> verifyOtp(
-            @PathVariable String transactionId,
+            @PathVariable("transactionId") String transactionId,
             @RequestBody OtpSubmitRequest request) {
 
         TransferResponse response = sagaOrchestrator.verifyOtpAndResumeSaga(transactionId, request.getOtpCode());
@@ -58,20 +58,20 @@ public class TransactionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<TransferTransaction>> getTransaction(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<TransferTransaction>> getTransaction(@PathVariable("id") String id) {
         TransferTransaction tx = transactionRepository.findById(id)
                 .orElseThrow(() -> new BankingException("TX_NOT_FOUND", "Transaction not found: " + id));
         return ResponseEntity.ok(ApiResponse.success(tx));
     }
 
     @GetMapping("/saga/{sagaId}/audit")
-    public ResponseEntity<ApiResponse<List<SagaStepLog>>> getSagaAuditLog(@PathVariable String sagaId) {
+    public ResponseEntity<ApiResponse<List<SagaStepLog>>> getSagaAuditLog(@PathVariable("sagaId") String sagaId) {
         List<SagaStepLog> logs = stepLogRepository.findBySagaIdOrderByTimestampAsc(sagaId);
         return ResponseEntity.ok(ApiResponse.success(logs));
     }
 
     @GetMapping("/account/{accountId}")
-    public ResponseEntity<ApiResponse<List<TransferTransaction>>> getAccountTransactions(@PathVariable String accountId) {
+    public ResponseEntity<ApiResponse<List<TransferTransaction>>> getAccountTransactions(@PathVariable("accountId") String accountId) {
         List<TransferTransaction> txs = transactionRepository.findBySourceAccountIdOrderByCreatedAtDesc(accountId);
         return ResponseEntity.ok(ApiResponse.success(txs));
     }

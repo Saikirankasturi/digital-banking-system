@@ -48,7 +48,7 @@ public class PaymentController {
     }
 
     @GetMapping("/orders/{id}")
-    public ResponseEntity<ApiResponse<PaymentOrder>> getOrder(@PathVariable String id) {
+    public ResponseEntity<ApiResponse<PaymentOrder>> getOrder(@PathVariable("id") String id) {
         PaymentOrder order = paymentService.getOrder(id);
         return ResponseEntity.ok(ApiResponse.success(order));
     }

@@ -37,7 +37,7 @@ public class FraudDetectionController {
     }
 
     @PostMapping("/generate-otp")
-    public ResponseEntity<ApiResponse<String>> generateOtp(@RequestParam String transactionId) {
+    public ResponseEntity<ApiResponse<String>> generateOtp(@RequestParam("transactionId") String transactionId) {
         String otp = fraudDetectionService.generateOtpForTransaction(transactionId);
         return ResponseEntity.ok(ApiResponse.success(otp, "OTP generated successfully"));
     }

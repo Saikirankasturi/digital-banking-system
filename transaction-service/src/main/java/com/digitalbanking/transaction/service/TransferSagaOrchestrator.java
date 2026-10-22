@@ -199,7 +199,7 @@ public class TransferSagaOrchestrator {
             saga.setCurrentStep("DEBIT_SOURCE_ACCOUNT");
             sagaRepository.save(saga);
 
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.error("[SAGA {}] Debit failed: {}", saga.getSagaId(), e.getMessage());
             recordStepLog(saga.getSagaId(), "DEBIT_SOURCE_ACCOUNT", "FAILED", e.getMessage(), System.currentTimeMillis() - startTime);
 
@@ -343,7 +343,7 @@ public class TransferSagaOrchestrator {
                     "Score: " + result.getRiskScore() + ", Decision: " + result.getDecision(),
                     System.currentTimeMillis() - startTime);
             return result;
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.warn("Fraud service evaluation failed, proceeding with fallback: {}", e.getMessage());
             recordStepLog(saga.getSagaId(), "FRAUD_EVALUATION", "WARNING", e.getMessage(), System.currentTimeMillis() - startTime);
             return FraudEvaluationResult.builder()
@@ -386,7 +386,7 @@ public class TransferSagaOrchestrator {
             if (kafkaTemplate != null) {
                 kafkaTemplate.send(topic, key, event);
             }
-        } catch (Exception e) {
+        } catch (Throwable e) {
             log.warn("Kafka event publishing skipped (Kafka broker offline): {}", e.getMessage());
         }
     }
