@@ -1,26 +1,31 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 spring:
   application:
     name: transaction-service
 
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:transactiondb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
-    driverClassName: ${SPRING_DATASOURCE_DRIVER:org.h2.Driver}
-    username: ${SPRING_DATASOURCE_USERNAME:sa}
-    password: ${SPRING_DATASOURCE_PASSWORD:}
+    url: ${SPRING_DATASOURCE_URL:jdbc:h2:mem:transaction_db;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
 
   jpa:
-    database-platform: ${SPRING_JPA_DATABASE_PLATFORM:org.hibernate.dialect.H2Dialect}
+    database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: update
     show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
 
   h2:
     console:
       enabled: true
       path: /h2-console
+      settings:
+        web-allow-others: true
 
   data:
     redis:

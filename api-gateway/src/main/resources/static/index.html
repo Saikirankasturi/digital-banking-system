@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏛️ Apex Digital Banking System | Real-Time Fraud & SAGA Platform</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#ecfeff',
+                            500: '#06b6d4',
+                            600: '#0891b2',
+                            900: '#164e63',
+                        },
+                        darkbg: '#0a0f1d',
+                        darkcard: '#111827',
+                        darkcard2: '#1f2937'
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.02); }
+        }
+        .pulse-anim { animation: pulse-slow 3s infinite ease-in-out; }
+        .glass { background: rgba(17, 24, 39, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); }
+    </style>
+</head>
+<body class="bg-darkbg text-slate-100 min-h-screen flex flex-col font-sans antialiased">
+
+    <!-- Top Navigation Bar -->
+    <header class="glass sticky top-0 z-50 px-6 py-4 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                    <i class="fa-solid fa-building-columns text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400">
+                        APEX DIGITAL BANK
+                    </h1>
+                    <p class="text-xs text-slate-400 tracking-wider">PRODUCTION SAGA & FRAUD DETECTION PLATFORM</p>
+                </div>
+            </div>
+
+            <!-- Health / Status Badges -->
+            <div class="flex items-center space-x-3">
+                <button onclick="seedDemoAccounts()" class="px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-lg text-xs font-semibold shadow flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-seedling"></i> Seed Demo Accounts
+                </button>
+                <div class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-full text-xs flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span>System Operational</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full space-y-8">
+
+        <!-- Metrics & Core Capabilities Banner -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div class="glass p-5 rounded-2xl flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-bolt"></i>
+                </div>
+                <div>
+                    <div class="text-xs text-slate-400 font-medium">Transfer Speed</div>
+                    <div class="text-xl font-bold text-white"><span id="lastTxTime">--</span> ms</div>
+                    <div class="text-[10px] text-cyan-400">Sub-second execution</div>
+                </div>
+            </div>
+
+            <div class="glass p-5 rounded-2xl flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-shield-halved"></i>
+                </div>
+                <div>
+                    <div class="text-xs text-slate-400 font-medium">Real-Time Fraud Engine</div>
+                    <div class="text-xl font-bold text-white"><span id="lastRiskScore">0</span> / 100</div>
+                    <div class="text-[10px] text-purple-400">Redis Sliding-Window</div>
+                </div>
+            </div>
+
+            <div class="glass p-5 rounded-2xl flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-arrows-split-up-and-left"></i>
+                </div>
+                <div>
+                    <div class="text-xs text-slate-400 font-medium">Distributed Consistency</div>
+                    <div class="text-xl font-bold text-white">SAGA Pattern</div>
+                    <div class="text-[10px] text-emerald-400">Zero Stuck Money</div>
+                </div>
+            </div>
+
+            <div class="glass p-5 rounded-2xl flex items-center space-x-4">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl">
+                    <i class="fa-solid fa-book-journal-whills"></i>
+                </div>
+                <div>
+                    <div class="text-xs text-slate-400 font-medium">Accounting Principle</div>
+                    <div class="text-xl font-bold text-white">Double-Entry</div>
+                    <div class="text-[10px] text-amber-400">Immutable Ledger</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Playground Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <!-- LEFT: Transfer & Simulator Form -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Payment Card Form -->
+                <div class="glass p-6 rounded-3xl space-y-5 border-t-2 border-cyan-500/80 shadow-2xl">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-lg font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-paper-plane text-cyan-400"></i> Tap & Transfer
+                        </h2>
+                        <span class="text-xs px-2.5 py-1 bg-cyan-900/40 text-cyan-300 rounded-lg font-mono">POST /api/v1/transfers</span>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1">Source Account (Sender)</label>
+                            <select id="sourceAccountSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:border-cyan-500 focus:outline-none transition">
+                                <option value="">Loading accounts...</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1">Beneficiary Account (Recipient)</label>
+                            <select id="targetAccountSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:border-cyan-500 focus:outline-none transition">
+                                <option value="">Loading accounts...</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-medium text-slate-300 mb-1">Transfer Amount ($ USD)</label>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-2.5 text-slate-500">$</span>
+                                <input type="number" id="transferAmount" value="250.00" step="10" min="1"
+                                    class="w-full bg-slate-900 border border-slate-700 rounded-xl pl-8 pr-3.5 py-2.5 text-sm font-semibold focus:border-cyan-500 focus:outline-none transition">
+                            </div>
+                        </div>
+
+                        <!-- One-Click Preset Scenarios -->
+                        <div class="pt-2">
+                            <label class="block text-xs font-semibold text-slate-400 mb-2">⚡ Quick Test Scenarios:</label>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <button type="button" onclick="setScenario('clean')" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-left transition">
+                                    <div class="font-semibold text-emerald-400">1. Normal Transfer</div>
+                                    <div class="text-[10px] text-slate-400">$250 (Approved in ms)</div>
+                                </button>
+                                <button type="button" onclick="setScenario('high_amount')" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-left transition">
+                                    <div class="font-semibold text-amber-400">2. Large Spike ($15k)</div>
+                                    <div class="text-[10px] text-slate-400">Triggers OTP Challenge</div>
+                                </button>
+                                <button type="button" onclick="setScenario('velocity')" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-left transition">
+                                    <div class="font-semibold text-purple-400">3. Rapid Velocity</div>
+                                    <div class="text-[10px] text-slate-400">Burst 4 txs in 5s</div>
+                                </button>
+                                <button type="button" onclick="setScenario('blacklist')" class="p-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-left transition">
+                                    <div class="font-semibold text-rose-400">4. Mule Account</div>
+                                    <div class="text-[10px] text-slate-400">Blacklist block (0 debit)</div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button id="sendPayBtn" onclick="executeTransfer()" class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-bold rounded-xl shadow-lg shadow-cyan-500/25 flex items-center justify-center gap-2 transition transform active:scale-98">
+                            <i class="fa-solid fa-lock"></i>
+                            <span>Tap to Pay (Execute SAGA)</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Account Balances Quick-Glance -->
+                <div class="glass p-6 rounded-3xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-bold text-slate-300">Live Accounts & Balances</h3>
+                        <button onclick="loadAccounts()" class="text-xs text-cyan-400 hover:underline"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                    </div>
+                    <div id="accountsList" class="space-y-2 text-xs">
+                        <div class="text-slate-500">Loading accounts...</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT 2 COLS: Live SAGA Stepper & Engine Visualizer -->
+            <div class="lg:col-span-2 space-y-6">
+
+                <!-- SAGA Orchestration Execution Stepper -->
+                <div class="glass p-6 rounded-3xl space-y-6 border border-slate-800">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h2 class="text-lg font-bold flex items-center gap-2">
+                                <i class="fa-solid fa-diagram-project text-cyan-400"></i> Distributed SAGA Stepper
+                            </h2>
+                            <p class="text-xs text-slate-400">Visualizing non-blocking state progression and compensating rollback logic</p>
+                        </div>
+                        <span id="sagaStatusBadge" class="px-3 py-1 bg-slate-800 text-slate-400 rounded-full text-xs font-semibold">IDLE</span>
+                    </div>
+
+                    <!-- Steps Timeline Horizontal -->
+                    <div class="grid grid-cols-4 gap-3 text-center">
+                        <!-- Step 1 -->
+                        <div id="step-idempotency" class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 transition">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 mx-auto flex items-center justify-center text-sm mb-2 step-icon">1</div>
+                            <div class="text-xs font-bold text-slate-300">Idempotency</div>
+                            <div class="text-[10px] text-slate-500">Redis Lock</div>
+                        </div>
+
+                        <!-- Step 2 -->
+                        <div id="step-fraud" class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 transition">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 mx-auto flex items-center justify-center text-sm mb-2 step-icon">2</div>
+                            <div class="text-xs font-bold text-slate-300">Fraud Engine</div>
+                            <div class="text-[10px] text-slate-500">Score & Rules</div>
+                        </div>
+
+                        <!-- Step 3 -->
+                        <div id="step-debit" class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 transition">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 mx-auto flex items-center justify-center text-sm mb-2 step-icon">3</div>
+                            <div class="text-xs font-bold text-slate-300">Debit Source</div>
+                            <div class="text-[10px] text-slate-500">Pessimistic Lock</div>
+                        </div>
+
+                        <!-- Step 4 -->
+                        <div id="step-credit" class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 transition">
+                            <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 mx-auto flex items-center justify-center text-sm mb-2 step-icon">4</div>
+                            <div class="text-xs font-bold text-slate-300">Credit Target</div>
+                            <div class="text-[10px] text-slate-500">Beneficiary</div>
+                        </div>
+                    </div>
+
+                    <!-- Live Execution Console / Status Log -->
+                    <div class="bg-black/40 border border-slate-800 rounded-2xl p-4 font-mono text-xs space-y-1.5 h-36 overflow-y-auto" id="executionConsole">
+                        <div class="text-slate-500">// Waiting for transfer initiation...</div>
+                    </div>
+                </div>
+
+                <!-- Double-Entry Bookkeeping Ledger History -->
+                <div class="glass p-6 rounded-3xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-table-list text-amber-400"></i> Immutable Double-Entry Ledger Book
+                        </h3>
+                        <span class="text-[11px] text-slate-400 font-mono">Debit == Credit Balance Guarantee</span>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead class="text-slate-400 border-b border-slate-800">
+                                <tr>
+                                    <th class="pb-2">Account ID</th>
+                                    <th class="pb-2">Type</th>
+                                    <th class="pb-2">Amount</th>
+                                    <th class="pb-2">Before</th>
+                                    <th class="pb-2">After</th>
+                                    <th class="pb-2">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ledgerTableBody" class="divide-y divide-slate-800/60 font-mono">
+                                <tr>
+                                    <td colspan="6" class="py-4 text-center text-slate-500">No recent ledger transactions</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Notifications & Kafka Dispatch Feed -->
+                <div class="glass p-6 rounded-3xl space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-sm font-bold flex items-center gap-2">
+                            <i class="fa-solid fa-bell text-cyan-400"></i> Event Stream & Customer Alerts
+                        </h3>
+                        <span class="text-[11px] text-slate-400 font-mono">Kafka topic: transaction-events & fraud-alerts</span>
+                    </div>
+                    <div id="notificationsContainer" class="space-y-2 text-xs">
+                        <div class="text-slate-500">Waiting for alerts...</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <!-- OTP Verification Modal -->
+    <div id="otpModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="glass max-w-md w-full p-6 rounded-3xl border border-amber-500/50 shadow-2xl space-y-4 text-center">
+            <div class="w-14 h-14 rounded-full bg-amber-500/20 text-amber-400 mx-auto flex items-center justify-center text-2xl">
+                <i class="fa-solid fa-shield-virus"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white">2FA Challenge: OTP Required</h3>
+            <p class="text-xs text-slate-300" id="otpReasonText">
+                Your transfer was flagged for extra security verification.
+            </p>
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-400">
+                <span>Simulated SMS to your phone: </span>
+                <span class="font-mono font-bold text-amber-400 text-sm ml-1" id="simulatedOtpCode">123456</span>
+            </div>
+            <div>
+                <input type="text" id="otpInputField" maxlength="6" placeholder="Enter 6-digit OTP"
+                    class="w-full text-center tracking-[0.5em] text-lg font-mono bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-amber-400 focus:outline-none">
+            </div>
+            <div class="flex gap-2">
+                <button onclick="closeOtpModal()" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold">Cancel</button>
+                <button onclick="submitOtpVerification()" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-black rounded-xl text-xs font-bold">Verify & Complete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        let accounts = [];
+        let currentPendingTxId = null;
+
+        // Auto-initialize on load
+        window.addEventListener('DOMContentLoaded', () => {
+            loadAccounts();
+            loadNotifications();
+            setInterval(loadNotifications, 4000);
+        });
+
+        function logConsole(msg, type = 'info') {
+            const consoleBox = document.getElementById('executionConsole');
+            const row = document.createElement('div');
+            const time = new Date().toLocaleTimeString();
+            let color = 'text-slate-300';
+            if (type === 'success') color = 'text-emerald-400 font-bold';
+            if (type === 'warn') color = 'text-amber-400 font-bold';
+            if (type === 'error') color = 'text-rose-400 font-bold';
+            row.className = `${color}`;
+            row.innerHTML = `<span class="text-slate-500">[${time}]</span> ${msg}`;
+            consoleBox.appendChild(row);
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        async function loadAccounts() {
+            try {
+                // Fetch first account to check connectivity
+                const res = await fetch('/api/v1/accounts/1').catch(() => null);
+                // Try to populate accounts if available
+                const listContainer = document.getElementById('accountsList');
+                if (accounts.length === 0) {
+                    listContainer.innerHTML = `
+                        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center">
+                            <div>
+                                <span class="font-bold text-cyan-400">Demo Accounts Available</span>
+                                <div class="text-[11px] text-slate-400">Click "Seed Demo Accounts" above to initialize Alice ($5000), Bob ($500), and Sanctioned Account.</div>
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        async function seedDemoAccounts() {
+            logConsole("Seeding demo accounts in PostgreSQL...", "info");
+            try {
+                // Create Alice
+                const r1 = await fetch('/api/v1/accounts', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({accountHolderName: "Alice Smith", email: "alice@bank.com", initialDeposit: 5000.00, currency: "USD"})
+                });
+                const d1 = await r1.json();
+
+                // Create Bob
+                const r2 = await fetch('/api/v1/accounts', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({accountHolderName: "Bob Jones", email: "bob@bank.com", initialDeposit: 500.00, currency: "USD"})
+                });
+                const d2 = await r2.json();
+
+                accounts = [d1.data, d2.data];
+                populateAccountSelects();
+                renderAccountsList();
+                logConsole(`Created Alice (${d1.data.id.substring(0,8)}... Bal: $${d1.data.balance}) and Bob (${d2.data.id.substring(0,8)}... Bal: $${d2.data.balance})`, "success");
+                loadLedgerForAccount(d1.data.id);
+            } catch (e) {
+                logConsole("Failed to seed accounts: " + e.message, "error");
+            }
+        }
+
+        function populateAccountSelects() {
+            const src = document.getElementById('sourceAccountSelect');
+            const tgt = document.getElementById('targetAccountSelect');
+            src.innerHTML = '';
+            tgt.innerHTML = '';
+
+            accounts.forEach((acc, idx) => {
+                const opt1 = new Option(`${acc.accountHolderName} ($${acc.balance})`, acc.id);
+                const opt2 = new Option(`${acc.accountHolderName} ($${acc.balance})`, acc.id);
+                src.add(opt1);
+                tgt.add(opt2);
+            });
+
+            // Add Blacklisted Destination
+            tgt.add(new Option("🚨 ACC-BLACK-9999 (Sanctioned Mule)", "ACC-BLACK-9999"));
+
+            if (src.options.length > 1) tgt.selectedIndex = 1;
+        }
+
+        function renderAccountsList() {
+            const container = document.getElementById('accountsList');
+            container.innerHTML = accounts.map(a => `
+                <div class="p-2.5 bg-slate-900/80 rounded-xl border border-slate-800 flex justify-between items-center cursor-pointer hover:border-cyan-500/50 transition" onclick="loadLedgerForAccount('${a.id}')">
+                    <div>
+                        <div class="font-bold text-slate-200">${a.accountHolderName}</div>
+                        <div class="text-[10px] text-slate-500 font-mono">${a.accountNumber} • ${a.id.substring(0,8)}...</div>
+                    </div>
+                    <div class="text-right">
+                        <div class="font-mono font-bold text-cyan-400">$${Number(a.balance).toFixed(2)}</div>
+                        <div class="text-[10px] text-emerald-400">${a.status}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        async function loadLedgerForAccount(accountId) {
+            try {
+                const res = await fetch(`/api/v1/accounts/${accountId}/ledger`);
+                const data = await res.json();
+                if (data.success && data.data) {
+                    renderLedger(data.data);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        function renderLedger(entries) {
+            const tbody = document.getElementById('ledgerTableBody');
+            if (entries.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-slate-500">No ledger entries</td></tr>`;
+                return;
+            }
+            tbody.innerHTML = entries.map(e => `
+                <tr class="hover:bg-slate-800/30">
+                    <td class="py-2.5 font-mono text-slate-400">${e.accountId.substring(0,8)}...</td>
+                    <td class="py-2.5 font-bold ${e.entryType === 'COMPENSATION' ? 'text-amber-400' : (e.entryType === 'DEBIT' ? 'text-rose-400' : 'text-emerald-400')}">${e.entryType}</td>
+                    <td class="py-2.5 font-bold">$${Number(e.amount).toFixed(2)}</td>
+                    <td class="py-2.5 text-slate-400">$${Number(e.balanceBefore).toFixed(2)}</td>
+                    <td class="py-2.5 font-bold text-slate-200">$${Number(e.balanceAfter).toFixed(2)}</td>
+                    <td class="py-2.5 text-slate-400 text-[11px] truncate max-w-[150px]">${e.description}</td>
+                </tr>
+            `).join('');
+        }
+
+        function setScenario(type) {
+            if (accounts.length < 2) {
+                alert("Please click 'Seed Demo Accounts' first!");
+                return;
+            }
+            const src = document.getElementById('sourceAccountSelect');
+            const tgt = document.getElementById('targetAccountSelect');
+            const amt = document.getElementById('transferAmount');
+
+            src.selectedIndex = 0;
+
+            if (type === 'clean') {
+                tgt.selectedIndex = 1;
+                amt.value = "250.00";
+            } else if (type === 'high_amount') {
+                tgt.selectedIndex = 1;
+                amt.value = "15000.00";
+            } else if (type === 'velocity') {
+                tgt.selectedIndex = 1;
+                amt.value = "50.00";
+                logConsole("Triggering burst velocity test (4 rapid transactions)...", "warn");
+                triggerVelocityBurst();
+                return;
+            } else if (type === 'blacklist') {
+                tgt.value = "ACC-BLACK-9999";
+                amt.value = "100.00";
+            }
+        }
+
+        async function triggerVelocityBurst() {
+            for (let i = 1; i <= 4; i++) {
+                logConsole(`Burst Transfer #${i} dispatched...`, "info");
+                await executeTransfer();
+                await new Promise(r => setTimeout(r, 400));
+            }
+        }
+
+        function resetStepper() {
+            ['step-idempotency', 'step-fraud', 'step-debit', 'step-credit'].forEach(id => {
+                const el = document.getElementById(id);
+                el.className = "p-3 rounded-2xl bg-slate-900/60 border border-slate-800 transition";
+            });
+        }
+
+        function activateStep(stepId, state = 'active') {
+            const el = document.getElementById(stepId);
+            if (!el) return;
+            if (state === 'active') {
+                el.className = "p-3 rounded-2xl bg-cyan-950/40 border border-cyan-500/80 shadow-lg shadow-cyan-500/10 transition";
+            } else if (state === 'success') {
+                el.className = "p-3 rounded-2xl bg-emerald-950/40 border border-emerald-500/80 transition";
+            } else if (state === 'failed') {
+                el.className = "p-3 rounded-2xl bg-rose-950/40 border border-rose-500/80 transition";
+            } else if (state === 'compensated') {
+                el.className = "p-3 rounded-2xl bg-amber-950/40 border border-amber-500/80 transition";
+            }
+        }
+
+        async function executeTransfer() {
+            const src = document.getElementById('sourceAccountSelect').value;
+            const tgt = document.getElementById('targetAccountSelect').value;
+            const amount = parseFloat(document.getElementById('transferAmount').value);
+
+            if (!src || !tgt) {
+                alert("Please select both source and beneficiary accounts.");
+                return;
+            }
+
+            resetStepper();
+            const badge = document.getElementById('sagaStatusBadge');
+            badge.className = "px-3 py-1 bg-cyan-500/20 text-cyan-400 rounded-full text-xs font-semibold animate-pulse";
+            badge.innerText = "SAGA IN PROGRESS";
+
+            const startTime = performance.now();
+            const idemKey = "idem-" + Date.now() + "-" + Math.random().toString(36).substring(7);
+
+            // Step 1: Idempotency
+            activateStep('step-idempotency', 'active');
+            logConsole(`[SAGA STEP 1] Checking Idempotency Key in Redis: ${idemKey}`, 'info');
+
+            try {
+                // Call API Gateway /api/v1/transfers
+                const res = await fetch('/api/v1/transfers', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Idempotency-Key': idemKey
+                    },
+                    body: JSON.stringify({
+                        sourceAccountId: src,
+                        targetAccountId: tgt,
+                        amount: amount,
+                        currency: "USD",
+                        ipAddress: "192.168.1.100"
+                    })
+                });
+
+                const data = await res.json();
+                const duration = Math.round(performance.now() - startTime);
+                document.getElementById('lastTxTime').innerText = duration;
+
+                if (!data.success) {
+                    badge.className = "px-3 py-1 bg-rose-500/20 text-rose-400 rounded-full text-xs font-semibold";
+                    badge.innerText = "FAILED";
+                    logConsole(`Transaction failed: ${data.message}`, 'error');
+                    return;
+                }
+
+                const tx = data.data;
+                document.getElementById('lastRiskScore').innerText = tx.fraudRiskScore;
+
+                if (tx.status === 'SUCCESS') {
+                    activateStep('step-idempotency', 'success');
+                    activateStep('step-fraud', 'success');
+                    activateStep('step-debit', 'success');
+                    activateStep('step-credit', 'success');
+                    badge.className = "px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-full text-xs font-semibold";
+                    badge.innerText = "SAGA COMPLETED (SUCCESS)";
+                    logConsole(`[SAGA SUCCESS] Transfer completed in ${duration}ms! TxID: ${tx.transactionId.substring(0,8)}...`, 'success');
+                } else if (tx.status === 'FRAUD_REJECTED') {
+                    activateStep('step-idempotency', 'success');
+                    activateStep('step-fraud', 'failed');
+                    badge.className = "px-3 py-1 bg-rose-500/20 text-rose-400 rounded-full text-xs font-semibold";
+                    badge.innerText = "FRAUD BLOCKED";
+                    logConsole(`[FRAUD REJECTED] Risk Score: ${tx.fraudRiskScore}/100. Money NEVER debited!`, 'error');
+                } else if (tx.status === 'FRAUD_FLAGGED') {
+                    activateStep('step-idempotency', 'success');
+                    activateStep('step-fraud', 'compensated');
+                    badge.className = "px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full text-xs font-semibold";
+                    badge.innerText = "OTP REQUIRED";
+                    logConsole(`[FRAUD CHALLENGE] Risk Score: ${tx.fraudRiskScore}/100. Halting SAGA pending OTP.`, 'warn');
+                    currentPendingTxId = tx.transactionId;
+                    showOtpModal(tx.transactionId);
+                } else if (tx.status === 'COMPENSATED') {
+                    activateStep('step-idempotency', 'success');
+                    activateStep('step-fraud', 'success');
+                    activateStep('step-debit', 'success');
+                    activateStep('step-credit', 'compensated');
+                    badge.className = "px-3 py-1 bg-amber-500/20 text-amber-400 rounded-full text-xs font-semibold";
+                    badge.innerText = "SAGA COMPENSATED (FUNDS SAFE)";
+                    logConsole(`[SAGA ROLLBACK] Target failed, compensating transaction triggered! Source account refunded.`, 'warn');
+                }
+
+                // Refresh accounts and ledger
+                seedRefresh();
+
+            } catch (e) {
+                logConsole("Transfer execution error: " + e.message, 'error');
+            }
+        }
+
+        async function showOtpModal(txId) {
+            // Generate OTP for this tx
+            try {
+                const res = await fetch(`/api/v1/fraud/generate-otp?transactionId=${txId}`, {method: 'POST'});
+                const data = await res.json();
+                document.getElementById('simulatedOtpCode').innerText = data.data || "784912";
+            } catch (e) {
+                document.getElementById('simulatedOtpCode').innerText = "784912";
+            }
+            document.getElementById('otpInputField').value = '';
+            document.getElementById('otpModal').classList.remove('hidden');
+        }
+
+        function closeOtpModal() {
+            document.getElementById('otpModal').classList.add('hidden');
+        }
+
+        async function submitOtpVerification() {
+            const inputCode = document.getElementById('otpInputField').value.trim();
+            if (!inputCode) {
+                alert("Please enter the 6-digit OTP");
+                return;
+            }
+
+            closeOtpModal();
+            logConsole(`[SAGA RESUMED] Verifying OTP ${inputCode} for Tx ${currentPendingTxId.substring(0,8)}...`, 'info');
+
+            try {
+                const res = await fetch(`/api/v1/transfers/${currentPendingTxId}/verify-otp`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({otpCode: inputCode})
+                });
+                const data = await res.json();
+
+                if (data.success && data.data && data.data.status === 'SUCCESS') {
+                    activateStep('step-debit', 'success');
+                    activateStep('step-credit', 'success');
+                    const badge = document.getElementById('sagaStatusBadge');
+                    badge.className = "px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-full text-xs font-semibold";
+                    badge.innerText = "SAGA COMPLETED (SUCCESS)";
+                    logConsole(`[OTP VERIFIED] SAGA resumed and completed successfully!`, 'success');
+                    seedRefresh();
+                } else {
+                    logConsole(`[OTP FAILED] Invalid OTP. SAGA remains halted.`, 'error');
+                }
+            } catch (e) {
+                logConsole("OTP verification error: " + e.message, 'error');
+            }
+        }
+
+        async function seedRefresh() {
+            const src = document.getElementById('sourceAccountSelect').value;
+            if (src) {
+                loadLedgerForAccount(src);
+            }
+        }
+
+        async function loadNotifications() {
+            try {
+                const res = await fetch('/api/v1/notifications');
+                const data = await res.json();
+                if (data.success && data.data && data.data.length > 0) {
+                    const c = document.getElementById('notificationsContainer');
+                    c.innerHTML = data.data.slice(-4).reverse().map(n => `
+                        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800/80 flex items-start gap-3">
+                            <div class="w-7 h-7 rounded-lg ${n.priority === 'CRITICAL' ? 'bg-rose-500/20 text-rose-400' : 'bg-cyan-500/20 text-cyan-400'} flex items-center justify-center shrink-0 text-xs">
+                                <i class="fa-solid ${n.priority === 'CRITICAL' ? 'fa-triangle-exclamation' : 'fa-bell'}"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex justify-between items-center">
+                                    <span class="font-bold text-slate-200">${n.title}</span>
+                                    <span class="text-[10px] text-slate-500 font-mono">${new Date(n.timestamp).toLocaleTimeString()}</span>
+                                </div>
+                                <p class="text-[11px] text-slate-400 mt-0.5">${n.message}</p>
+                            </div>
+                        </div>
+                    `).join('');
+                }
+            } catch (e) {
+                // Ignore silent polling error
+            }
+        }
+    </script>
+</body>
+</html>

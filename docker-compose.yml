@@ -1,6 +1,6 @@
 services:
   # ==============================================================================
-  # Relational Database: PostgreSQL 16
+  # 1. Relational Database: PostgreSQL 16
   # ==============================================================================
   postgres:
     image: postgres:16-alpine
@@ -8,7 +8,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgrespassword
-      POSTGRES_DB: banking_db
+      POSTGRES_DB: postgres
     ports:
       - "5432:5432"
     volumes:
@@ -18,10 +18,12 @@ services:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
+    networks:
+      - banking-network
 
   # ==============================================================================
-  # In-Memory Cache, Locks & Velocity Engine: Redis 7
+  # 2. In-Memory Cache, Locks & Velocity Engine: Redis 7
   # ==============================================================================
   redis:
     image: redis:7.2-alpine
@@ -35,9 +37,10 @@ services:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 5s
-      retries: 5
+      retries: 10
+    networks:
+      - banking-network
 
-  # Redis GUI
   redis-commander:
     image: rediscommander/redis-commander:latest
     container_name: banking-redis-commander
@@ -48,9 +51,11 @@ services:
     depends_on:
       redis:
         condition: service_healthy
+    networks:
+      - banking-network
 
   # ==============================================================================
-  # Event Backbone: Apache Kafka (KRaft mode)
+  # 3. Event Backbone: Apache Kafka (KRaft mode)
   # ==============================================================================
   kafka:
     image: confluentinc/cp-kafka:7.6.1
@@ -75,8 +80,9 @@ services:
       CLUSTER_ID: 'MkU3OEVBNTcwNTJENDM2Qk'
     volumes:
       - kafka_data:/var/lib/kafka/data
+    networks:
+      - banking-network
 
-  # Kafka Web UI: Kafdrop
   kafdrop:
     image: obsidiandynamics/kafdrop:latest
     container_name: banking-kafdrop
@@ -87,6 +93,159 @@ services:
       JVM_OPTS: "-Xms32M -Xmx64M"
     depends_on:
       - kafka
+    networks:
+      - banking-network
+
+  # ==============================================================================
+  # 4. Account Service (Double-Entry Ledger & Balance)
+  # ==============================================================================
+  account-service:
+    build:
+      context: .
+      dockerfile: account-service/Dockerfile
+    container_name: banking-account-service
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/account_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgrespassword
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    networks:
+      - banking-network
+
+  # ==============================================================================
+  # 5. Fraud Detection Service (Redis Sliding Windows)
+  # ==============================================================================
+  fraud-detection-service:
+    build:
+      context: .
+      dockerfile: fraud-detection-service/Dockerfile
+    container_name: banking-fraud-service
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    networks:
+      - banking-network
+
+  # ==============================================================================
+  # 6. Transaction Service (SAGA Orchestrator)
+  # ==============================================================================
+  transaction-service:
+    build:
+      context: .
+      dockerfile: transaction-service/Dockerfile
+    container_name: banking-transaction-service
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/transaction_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgrespassword
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      ACCOUNT_SERVICE_URL: http://account-service:8081
+      FRAUD_SERVICE_URL: http://fraud-detection-service:8082
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+      account-service:
+        condition: service_started
+      fraud-detection-service:
+        condition: service_started
+    networks:
+      - banking-network
+
+  # ==============================================================================
+  # 7. Notification Service (Alerts & SMS Dispatch)
+  # ==============================================================================
+  notification-service:
+    build:
+      context: .
+      dockerfile: notification-service/Dockerfile
+    container_name: banking-notification-service
+    ports:
+      - "8083:8083"
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    depends_on:
+      - kafka
+    networks:
+      - banking-network
+
+  # ==============================================================================
+  # 8. Payment Service (Gateway Orders & Webhooks)
+  # ==============================================================================
+  payment-service:
+    build:
+      context: .
+      dockerfile: payment-service/Dockerfile
+    container_name: banking-payment-service
+    ports:
+      - "8084:8084"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/payment_db
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgrespassword
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      ACCOUNT_SERVICE_URL: http://account-service:8081
+    depends_on:
+      postgres:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    networks:
+      - banking-network
+
+  # ==============================================================================
+  # 9. API Gateway (Rate Limiting & Dynamic Routing)
+  # ==============================================================================
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+    container_name: banking-api-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      TRANSACTION_SERVICE_URL: http://transaction-service:8080
+      ACCOUNT_SERVICE_URL: http://account-service:8081
+      FRAUD_SERVICE_URL: http://fraud-detection-service:8082
+      NOTIFICATION_SERVICE_URL: http://notification-service:8083
+      PAYMENT_SERVICE_URL: http://payment-service:8084
+    depends_on:
+      redis:
+        condition: service_healthy
+      transaction-service:
+        condition: service_started
+      account-service:
+        condition: service_started
+    networks:
+      - banking-network
+
+networks:
+  banking-network:
+    driver: bridge
 
 volumes:
   postgres_data:

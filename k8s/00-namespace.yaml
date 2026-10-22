@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: digital-banking
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: banking-config
+  namespace: digital-banking
+data:
+  SPRING_KAFKA_BOOTSTRAP_SERVERS: "kafka-service:9092"
+  SPRING_DATA_REDIS_HOST: "redis-service"
+  SPRING_DATA_REDIS_PORT: "6379"
+  POSTGRES_HOST: "postgres-service"
+  ACCOUNT_SERVICE_URL: "http://account-service:8081"
+  FRAUD_SERVICE_URL: "http://fraud-detection-service:8082"
+  TRANSACTION_SERVICE_URL: "http://transaction-service:8080"
+  NOTIFICATION_SERVICE_URL: "http://notification-service:8083"
+  PAYMENT_SERVICE_URL: "http://payment-service:8084"

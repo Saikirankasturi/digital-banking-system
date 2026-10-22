@@ -27,7 +27,8 @@ public class AccountClient {
     public AccountClient(RestTemplate restTemplate,
                          @Value("${services.account.url:http://localhost:8081}") String accountServiceUrl) {
         this.restTemplate = restTemplate;
-        this.accountServiceUrl = accountServiceUrl;
+        String url = accountServiceUrl.trim();
+        this.accountServiceUrl = url.startsWith("http://") || url.startsWith("https://") ? url : "http://" + url;
     }
 
     public AccountDto getAccount(String accountId) {

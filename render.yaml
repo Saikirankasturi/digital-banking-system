@@ -1,0 +1,118 @@
+# ==============================================================================
+# Render Blueprint Specification (render.yaml)
+# Zero-Setup Digital Banking System with In-Memory H2 Database & Live Web UI
+# ==============================================================================
+version: "1"
+
+services:
+  # 1. API Gateway (Public Web UI & Dynamic Routing)
+  - type: web
+    name: banking-api-gateway
+    env: docker
+    dockerfilePath: ./api-gateway/Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: TRANSACTION_SERVICE_URL
+        fromService:
+          type: web
+          name: banking-transaction-service
+          property: host
+      - key: ACCOUNT_SERVICE_URL
+        fromService:
+          type: web
+          name: banking-account-service
+          property: host
+      - key: FRAUD_SERVICE_URL
+        fromService:
+          type: web
+          name: banking-fraud-service
+          property: host
+      - key: NOTIFICATION_SERVICE_URL
+        fromService:
+          type: web
+          name: banking-notification-service
+          property: host
+      - key: PAYMENT_SERVICE_URL
+        fromService:
+          type: web
+          name: banking-payment-service
+          property: host
+
+  # 2. Transaction Service (SAGA Orchestrator & State Machine)
+  - type: web
+    name: banking-transaction-service
+    env: docker
+    dockerfilePath: ./transaction-service/Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: ACCOUNT_SERVICE_URL
+        fromService:
+          type: web
+          name: banking-account-service
+          property: host
+      - key: FRAUD_SERVICE_URL
+        fromService:
+          type: web
+          name: banking-fraud-service
+          property: host
+
+  # 3. Account Service (Double-Entry Ledger & Balance with H2 DB)
+  - type: web
+    name: banking-account-service
+    env: docker
+    dockerfilePath: ./account-service/Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8081
+
+  # 4. Fraud Detection Service (Sliding Window Velocity Rules)
+  - type: web
+    name: banking-fraud-service
+    env: docker
+    dockerfilePath: ./fraud-detection-service/Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8082
+
+  # 5. Notification Service (Alerts & SMS Dispatch)
+  - type: web
+    name: banking-notification-service
+    env: docker
+    dockerfilePath: ./notification-service/Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8083
+
+  # 6. Payment Service (Gateway Orders & Webhooks)
+  - type: web
+    name: banking-payment-service
+    env: docker
+    dockerfilePath: ./payment-service/Dockerfile
+    dockerContext: .
+    plan: free
+    region: oregon
+    envVars:
+      - key: PORT
+        value: 8084
+      - key: ACCOUNT_SERVICE_URL
+        fromService:
+          type: web
+          name: banking-account-service
+          property: host
