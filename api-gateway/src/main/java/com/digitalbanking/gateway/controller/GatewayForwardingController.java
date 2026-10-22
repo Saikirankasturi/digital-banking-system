@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 
 @Slf4j
+@org.springframework.boot.autoconfigure.condition.ConditionalOnProperty(name = "gateway.proxy.enabled", havingValue = "true", matchIfMissing = true)
 @RestController
 public class GatewayForwardingController {
 

@@ -32,6 +32,16 @@ public class AccountController {
                 .body(ApiResponse.success(created, "Account opened successfully"));
     }
 
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<AccountDto>>> getAllAccounts() {
+        return ResponseEntity.ok(ApiResponse.success(accountService.getAllAccounts()));
+    }
+
+    @GetMapping("/ledger/recent")
+    public ResponseEntity<ApiResponse<List<LedgerEntry>>> getRecentLedgers() {
+        return ResponseEntity.ok(ApiResponse.success(accountService.getAllRecentLedgerEntries()));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<AccountDto>> getAccount(@PathVariable String id) {
         AccountDto account = accountService.getAccount(id);

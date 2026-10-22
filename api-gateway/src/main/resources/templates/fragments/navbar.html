@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+    <!-- Top Navigation Bar Fragment -->
+    <header th:fragment="navbar" class="glass sticky top-0 z-50 px-6 py-4 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
+                    <i class="fa-solid fa-building-columns text-white text-lg"></i>
+                </div>
+                <div>
+                    <div class="flex items-center gap-2">
+                        <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400">
+                            APEX DIGITAL BANK
+                        </h1>
+                        <span class="px-2 py-0.5 text-[10px] font-mono bg-cyan-900/60 text-cyan-300 border border-cyan-500/30 rounded-md">
+                            <i class="fa-solid fa-leaf text-emerald-400 mr-1"></i>Thymeleaf SSR
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-400 tracking-wider">PRODUCTION SAGA, REAL-TIME FRAUD &amp; DOUBLE-ENTRY PLATFORM</p>
+                </div>
+            </div>
+
+            <!-- Action & Status Badges -->
+            <div class="flex items-center space-x-3">
+                <button onclick="seedDemoAccounts()" class="px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-lg text-xs font-semibold shadow flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-seedling"></i> Seed Demo Accounts
+                </button>
+                <a th:href="@{${h2ConsoleUrl}}" target="_blank" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-database text-amber-400"></i> H2 DB Console
+                </a>
+                <div class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-full text-xs flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span th:text="${systemStatus}">System Operational</span>
+                </div>
+            </div>
+        </div>
+    </header>
+</body>
+</html>

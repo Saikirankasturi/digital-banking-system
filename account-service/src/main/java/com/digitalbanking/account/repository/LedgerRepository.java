@@ -12,4 +12,6 @@ public interface LedgerRepository extends JpaRepository<LedgerEntry, String> {
     List<LedgerEntry> findByAccountIdOrderByCreatedAtDesc(String accountId);
 
     List<LedgerEntry> findByTransactionIdOrderByCreatedAtAsc(String transactionId);
+
+    List<LedgerEntry> findTop50ByOrderByCreatedAtDesc();
 }

@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.stream.Collectors;
 
 @Slf4j
-@RestControllerAdvice
-public class GlobalExceptionHandler {
+@RestControllerAdvice(basePackages = "com.digitalbanking.account")
+public class AccountGlobalExceptionHandler {
 
     @ExceptionHandler(BankingException.class)
     public ResponseEntity<ApiResponse<Void>> handleBankingException(BankingException ex) {
-        log.warn("Banking error [{}]: {}", ex.getErrorCode(), ex.getMessage());
+        log.warn("Account banking error [{}]: {}", ex.getErrorCode(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.error(ex.getMessage()));
     }
@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGeneralException(Exception ex) {
-        log.error("Internal system error: ", ex);
+        log.error("Internal account service error: ", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiResponse.error("Internal banking server error: " + ex.getMessage()));
     }

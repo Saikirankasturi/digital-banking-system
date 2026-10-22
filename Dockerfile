@@ -17,9 +17,10 @@ RUN mvn clean package -pl banking-server -am -DskipTests
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 
-COPY --from=builder /build/banking-server/target/banking-server-*.jar app.jar
+COPY --from=builder /build/banking-server/target/banking-server-*-exec.jar app.jar
 
 ENV JAVA_OPTS="-Xms200m -Xmx420m -XX:+UseG1GC"
 EXPOSE 8080
 
 ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+

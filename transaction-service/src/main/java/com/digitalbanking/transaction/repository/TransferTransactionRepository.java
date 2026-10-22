@@ -15,4 +15,6 @@ public interface TransferTransactionRepository extends JpaRepository<TransferTra
     Optional<TransferTransaction> findBySagaId(String sagaId);
 
     List<TransferTransaction> findBySourceAccountIdOrderByCreatedAtDesc(String sourceAccountId);
+
+    List<TransferTransaction> findTop50ByOrderByCreatedAtDesc();
 }

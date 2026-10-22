@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head></head>
+<body>
+    <!-- Metrics & Core Capabilities Banner Fragment -->
+    <div th:fragment="metrics" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="glass p-5 rounded-2xl flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-bolt"></i>
+            </div>
+            <div>
+                <div class="text-xs text-slate-400 font-medium">Transfer Speed</div>
+                <div class="text-xl font-bold text-white"><span id="lastTxTime">--</span> ms</div>
+                <div class="text-[10px] text-cyan-400">Sub-second execution</div>
+            </div>
+        </div>
+
+        <div class="glass p-5 rounded-2xl flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+                <div class="text-xs text-slate-400 font-medium">Real-Time Fraud Engine</div>
+                <div class="text-xl font-bold text-white"><span id="lastRiskScore">0</span> / 100</div>
+                <div class="text-[10px] text-purple-400">Redis Sliding-Window</div>
+            </div>
+        </div>
+
+        <div class="glass p-5 rounded-2xl flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-vault"></i>
+            </div>
+            <div>
+                <div class="text-xs text-slate-400 font-medium">System Liquidity</div>
+                <div class="text-xl font-bold text-white" id="totalLiquidityDisplay" th:text="'$' + ${#numbers.formatDecimal(totalLiquidity, 1, 'COMMA', 2, 'POINT')}">$58,700.00</div>
+                <div class="text-[10px] text-emerald-400">Thymeleaf SSR Bound</div>
+            </div>
+        </div>
+
+        <div class="glass p-5 rounded-2xl flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl">
+                <i class="fa-solid fa-book-journal-whills"></i>
+            </div>
+            <div>
+                <div class="text-xs text-slate-400 font-medium">Accounts &amp; Ledger</div>
+                <div class="text-xl font-bold text-white">
+                    <span id="accountCountDisplay" th:text="${accountCount}">4</span> Accs /
+                    <span id="ledgerCountDisplay" th:text="${ledgerCount}">4</span> Logs
+                </div>
+                <div class="text-[10px] text-amber-400">Double-Entry Immutable</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

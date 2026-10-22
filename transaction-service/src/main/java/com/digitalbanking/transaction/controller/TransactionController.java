@@ -52,6 +52,11 @@ public class TransactionController {
         return ResponseEntity.ok(ApiResponse.success(response, response.getMessage()));
     }
 
+    @GetMapping("/recent")
+    public ResponseEntity<ApiResponse<List<TransferTransaction>>> getRecentTransactions() {
+        return ResponseEntity.ok(ApiResponse.success(transactionRepository.findTop50ByOrderByCreatedAtDesc()));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<TransferTransaction>> getTransaction(@PathVariable String id) {
         TransferTransaction tx = transactionRepository.findById(id)

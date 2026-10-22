@@ -27,10 +27,21 @@ spring:
       settings:
         web-allow-others: true
 
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+    encoding: UTF-8
+
   kafka:
     bootstrap-servers: ${SPRING_KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     listener:
       auto-startup: false
+
+gateway:
+  proxy:
+    enabled: false
 
 services:
   account:

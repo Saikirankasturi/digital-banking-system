@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="dark" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🏛️ Apex Digital Banking System | Real-Time Fraud & SAGA Platform</title>
+    <title>🏛️ Apex Digital Banking System | Thymeleaf SSR &amp; SAGA Platform</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -39,85 +39,16 @@
 </head>
 <body class="bg-darkbg text-slate-100 min-h-screen flex flex-col font-sans antialiased">
 
-    <!-- Top Navigation Bar -->
-    <header class="glass sticky top-0 z-50 px-6 py-4 border-b border-slate-800">
-        <div class="max-w-7xl mx-auto flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/30">
-                    <i class="fa-solid fa-building-columns text-white text-lg"></i>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-400">
-                        APEX DIGITAL BANK
-                    </h1>
-                    <p class="text-xs text-slate-400 tracking-wider">PRODUCTION SAGA & FRAUD DETECTION PLATFORM</p>
-                </div>
-            </div>
-
-            <!-- Health / Status Badges -->
-            <div class="flex items-center space-x-3">
-                <button onclick="seedDemoAccounts()" class="px-3 py-1.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-lg text-xs font-semibold shadow flex items-center gap-1.5 transition">
-                    <i class="fa-solid fa-seedling"></i> Seed Demo Accounts
-                </button>
-                <div class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 rounded-full text-xs flex items-center gap-2">
-                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                    <span>System Operational</span>
-                </div>
-            </div>
-        </div>
-    </header>
+    <!-- Top Navigation Bar Fragment -->
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-6 py-8 flex-1 w-full space-y-8">
 
-        <!-- Metrics & Core Capabilities Banner -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div class="glass p-5 rounded-2xl flex items-center space-x-4">
-                <div class="w-12 h-12 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-bolt"></i>
-                </div>
-                <div>
-                    <div class="text-xs text-slate-400 font-medium">Transfer Speed</div>
-                    <div class="text-xl font-bold text-white"><span id="lastTxTime">--</span> ms</div>
-                    <div class="text-[10px] text-cyan-400">Sub-second execution</div>
-                </div>
-            </div>
+        <!-- Metrics & Core Capabilities Banner Fragment -->
+        <div th:replace="~{fragments/metrics :: metrics}"></div>
 
-            <div class="glass p-5 rounded-2xl flex items-center space-x-4">
-                <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-shield-halved"></i>
-                </div>
-                <div>
-                    <div class="text-xs text-slate-400 font-medium">Real-Time Fraud Engine</div>
-                    <div class="text-xl font-bold text-white"><span id="lastRiskScore">0</span> / 100</div>
-                    <div class="text-[10px] text-purple-400">Redis Sliding-Window</div>
-                </div>
-            </div>
-
-            <div class="glass p-5 rounded-2xl flex items-center space-x-4">
-                <div class="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-arrows-split-up-and-left"></i>
-                </div>
-                <div>
-                    <div class="text-xs text-slate-400 font-medium">Distributed Consistency</div>
-                    <div class="text-xl font-bold text-white">SAGA Pattern</div>
-                    <div class="text-[10px] text-emerald-400">Zero Stuck Money</div>
-                </div>
-            </div>
-
-            <div class="glass p-5 rounded-2xl flex items-center space-x-4">
-                <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl">
-                    <i class="fa-solid fa-book-journal-whills"></i>
-                </div>
-                <div>
-                    <div class="text-xs text-slate-400 font-medium">Accounting Principle</div>
-                    <div class="text-xl font-bold text-white">Double-Entry</div>
-                    <div class="text-[10px] text-amber-400">Immutable Ledger</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Interactive Playground Grid -->
+        <!-- Interactive SAGA Transfer & Simulator Grid -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
             <!-- LEFT: Transfer & Simulator Form -->
@@ -126,7 +57,7 @@
                 <div class="glass p-6 rounded-3xl space-y-5 border-t-2 border-cyan-500/80 shadow-2xl">
                     <div class="flex items-center justify-between">
                         <h2 class="text-lg font-bold flex items-center gap-2">
-                            <i class="fa-solid fa-paper-plane text-cyan-400"></i> Tap & Transfer
+                            <i class="fa-solid fa-paper-plane text-cyan-400"></i> Tap &amp; Transfer
                         </h2>
                         <span class="text-xs px-2.5 py-1 bg-cyan-900/40 text-cyan-300 rounded-lg font-mono">POST /api/v1/transfers</span>
                     </div>
@@ -135,14 +66,24 @@
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">Source Account (Sender)</label>
                             <select id="sourceAccountSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:border-cyan-500 focus:outline-none transition">
-                                <option value="">Loading accounts...</option>
+                                <option th:each="acc : ${accounts}"
+                                        th:value="${acc.id}"
+                                        th:selected="${acc.id == defaultSourceAccountId}"
+                                        th:text="${acc.accountHolderName} + ' ($' + ${#numbers.formatDecimal(acc.balance, 1, 2)} + ')'">
+                                </option>
+                                <option th:if="${#lists.isEmpty(accounts)}" value="">No accounts available (Seed Demo)</option>
                             </select>
                         </div>
 
                         <div>
                             <label class="block text-xs font-medium text-slate-300 mb-1">Beneficiary Account (Recipient)</label>
                             <select id="targetAccountSelect" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm focus:border-cyan-500 focus:outline-none transition">
-                                <option value="">Loading accounts...</option>
+                                <option th:each="acc, iterStat : ${accounts}"
+                                        th:value="${acc.id}"
+                                        th:selected="${iterStat.index == 1 or (iterStat.size == 1 and iterStat.index == 0)}"
+                                        th:text="${acc.accountHolderName} + ' ($' + ${#numbers.formatDecimal(acc.balance, 1, 2)} + ')'">
+                                </option>
+                                <option value="ACC-BLACK-9999">🚨 ACC-BLACK-9999 (Sanctioned Mule)</option>
                             </select>
                         </div>
 
@@ -186,14 +127,41 @@
                     </div>
                 </div>
 
-                <!-- Account Balances Quick-Glance -->
+                <!-- Account Balances Quick-Glance (Thymeleaf SSR Pre-Rendered) -->
                 <div class="glass p-6 rounded-3xl space-y-4">
                     <div class="flex items-center justify-between">
-                        <h3 class="text-sm font-bold text-slate-300">Live Accounts & Balances</h3>
-                        <button onclick="loadAccounts()" class="text-xs text-cyan-400 hover:underline"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-sm font-bold text-slate-300">Live Accounts &amp; Balances</h3>
+                            <span class="text-[10px] font-mono px-1.5 py-0.5 bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 rounded">Thymeleaf SSR</span>
+                        </div>
+                        <button onclick="refreshAccountsViaAjax()" class="text-xs text-cyan-400 hover:underline"><i class="fa-solid fa-rotate"></i> Refresh</button>
                     </div>
                     <div id="accountsList" class="space-y-2 text-xs">
-                        <div class="text-slate-500">Loading accounts...</div>
+                        <div th:each="acc : ${accounts}"
+                             th:id="'acc-item-' + ${acc.id}"
+                             th:data-account-id="${acc.id}"
+                             onclick="loadLedgerForAccount(this.dataset.accountId)"
+                             class="p-2.5 bg-slate-900/80 rounded-xl border border-slate-800 flex justify-between items-center cursor-pointer hover:border-cyan-500/50 transition">
+                            <div>
+                                <div class="font-bold text-slate-200 flex items-center gap-1.5">
+                                    <span th:text="${acc.accountHolderName}">Alice Smith</span>
+                                </div>
+                                <div class="text-[10px] text-slate-500 font-mono"
+                                     th:text="${acc.accountNumber} + ' • ' + ${#strings.substring(acc.id, 0, 8)} + '...'">
+                                    1234567890 • abc-123...
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="font-mono font-bold text-cyan-400"
+                                     th:text="'$' + ${#numbers.formatDecimal(acc.balance, 1, 2)}">
+                                    $5,000.00
+                                </div>
+                                <div class="text-[10px] text-emerald-400" th:text="${acc.status}">ACTIVE</div>
+                            </div>
+                        </div>
+                        <div th:if="${#lists.isEmpty(accounts)}" class="text-slate-500 p-3 text-center">
+                            No accounts found. Click "Seed Demo Accounts" to bootstrap.
+                        </div>
                     </div>
                 </div>
             </div>
@@ -226,7 +194,7 @@
                         <div id="step-fraud" class="p-3 rounded-2xl bg-slate-900/60 border border-slate-800 transition">
                             <div class="w-8 h-8 rounded-full bg-slate-800 text-slate-400 mx-auto flex items-center justify-center text-sm mb-2 step-icon">2</div>
                             <div class="text-xs font-bold text-slate-300">Fraud Engine</div>
-                            <div class="text-[10px] text-slate-500">Score & Rules</div>
+                            <div class="text-[10px] text-slate-500">Score &amp; Rules</div>
                         </div>
 
                         <!-- Step 3 -->
@@ -246,16 +214,19 @@
 
                     <!-- Live Execution Console / Status Log -->
                     <div class="bg-black/40 border border-slate-800 rounded-2xl p-4 font-mono text-xs space-y-1.5 h-36 overflow-y-auto" id="executionConsole">
-                        <div class="text-slate-500">// Waiting for transfer initiation...</div>
+                        <div class="text-slate-500">// System initialized via Spring Boot &amp; Thymeleaf SSR. Ready for transfer.</div>
                     </div>
                 </div>
 
-                <!-- Double-Entry Bookkeeping Ledger History -->
+                <!-- Double-Entry Bookkeeping Ledger History (Thymeleaf SSR Pre-Rendered) -->
                 <div class="glass p-6 rounded-3xl space-y-4">
                     <div class="flex items-center justify-between">
-                        <h3 class="text-sm font-bold flex items-center gap-2">
-                            <i class="fa-solid fa-table-list text-amber-400"></i> Immutable Double-Entry Ledger Book
-                        </h3>
+                        <div class="flex items-center gap-2">
+                            <h3 class="text-sm font-bold flex items-center gap-2">
+                                <i class="fa-solid fa-table-list text-amber-400"></i> Immutable Double-Entry Ledger Book
+                            </h3>
+                            <span class="text-[10px] font-mono px-1.5 py-0.5 bg-amber-950/60 border border-amber-500/30 text-amber-400 rounded">Thymeleaf SSR</span>
+                        </div>
                         <span class="text-[11px] text-slate-400 font-mono">Debit == Credit Balance Guarantee</span>
                     </div>
 
@@ -272,7 +243,22 @@
                                 </tr>
                             </thead>
                             <tbody id="ledgerTableBody" class="divide-y divide-slate-800/60 font-mono">
-                                <tr>
+                                <tr th:each="entry : ${recentLedgers}" class="hover:bg-slate-800/30 transition">
+                                    <td class="py-2.5 font-mono text-slate-400"
+                                        th:text="${#strings.length(entry.accountId) > 8 ? #strings.substring(entry.accountId, 0, 8) + '...' : entry.accountId}">
+                                        acc-123...
+                                    </td>
+                                    <td class="py-2.5 font-bold"
+                                        th:classappend="${entry.entryType.name() == 'COMPENSATION' ? 'text-amber-400' : (entry.entryType.name() == 'DEBIT' ? 'text-rose-400' : 'text-emerald-400')}"
+                                        th:text="${entry.entryType}">
+                                        DEPOSIT
+                                    </td>
+                                    <td class="py-2.5 font-bold" th:text="'$' + ${#numbers.formatDecimal(entry.amount, 1, 2)}">$5,000.00</td>
+                                    <td class="py-2.5 text-slate-400" th:text="'$' + ${#numbers.formatDecimal(entry.balanceBefore, 1, 2)}">$0.00</td>
+                                    <td class="py-2.5 font-bold text-slate-200" th:text="'$' + ${#numbers.formatDecimal(entry.balanceAfter, 1, 2)}">$5,000.00</td>
+                                    <td class="py-2.5 text-slate-400 text-[11px] truncate max-w-[180px]" th:text="${entry.description}">Initial opening deposit</td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(recentLedgers)}">
                                     <td colspan="6" class="py-4 text-center text-slate-500">No recent ledger transactions</td>
                                 </tr>
                             </tbody>
@@ -284,9 +270,9 @@
                 <div class="glass p-6 rounded-3xl space-y-4">
                     <div class="flex items-center justify-between">
                         <h3 class="text-sm font-bold flex items-center gap-2">
-                            <i class="fa-solid fa-bell text-cyan-400"></i> Event Stream & Customer Alerts
+                            <i class="fa-solid fa-bell text-cyan-400"></i> Event Stream &amp; Customer Alerts
                         </h3>
-                        <span class="text-[11px] text-slate-400 font-mono">Kafka topic: transaction-events & fraud-alerts</span>
+                        <span class="text-[11px] text-slate-400 font-mono">Kafka topic: transaction-events &amp; fraud-alerts</span>
                     </div>
                     <div id="notificationsContainer" class="space-y-2 text-xs">
                         <div class="text-slate-500">Waiting for alerts...</div>
@@ -318,19 +304,19 @@
             </div>
             <div class="flex gap-2">
                 <button onclick="closeOtpModal()" class="flex-1 py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-semibold">Cancel</button>
-                <button onclick="submitOtpVerification()" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-black rounded-xl text-xs font-bold">Verify & Complete</button>
+                <button onclick="submitOtpVerification()" class="flex-1 py-2.5 bg-amber-500 hover:bg-amber-400 text-black rounded-xl text-xs font-bold">Verify &amp; Complete</button>
             </div>
         </div>
     </div>
 
-    <!-- JavaScript Application Logic -->
+    <!-- JavaScript Application Logic (Syncs with Thymeleaf SSR State) -->
     <script>
         let accounts = [];
         let currentPendingTxId = null;
 
         // Auto-initialize on load
         window.addEventListener('DOMContentLoaded', () => {
-            loadAccounts();
+            refreshAccountsViaAjax(false);
             loadNotifications();
             setInterval(loadNotifications, 4000);
         });
@@ -349,50 +335,55 @@
             consoleBox.scrollTop = consoleBox.scrollHeight;
         }
 
-        async function loadAccounts() {
+        async function refreshAccountsViaAjax(showLog = true) {
             try {
-                // Fetch first account to check connectivity
-                const res = await fetch('/api/v1/accounts/1').catch(() => null);
-                // Try to populate accounts if available
-                const listContainer = document.getElementById('accountsList');
-                if (accounts.length === 0) {
-                    listContainer.innerHTML = `
-                        <div class="p-3 bg-slate-900/60 rounded-xl border border-slate-800 flex justify-between items-center">
-                            <div>
-                                <span class="font-bold text-cyan-400">Demo Accounts Available</span>
-                                <div class="text-[11px] text-slate-400">Click "Seed Demo Accounts" above to initialize Alice ($5000), Bob ($500), and Sanctioned Account.</div>
-                            </div>
-                        </div>
-                    `;
+                const res = await fetch('/api/v1/accounts');
+                if (!res.ok) return;
+                const data = await res.json();
+                if (data.success && data.data && data.data.length > 0) {
+                    accounts = data.data;
+                    populateAccountSelects();
+                    renderAccountsList();
+                    updateSystemMetrics();
+                    if (showLog) logConsole(`Loaded ${accounts.length} active accounts from server.`, "info");
                 }
             } catch (e) {
-                console.error(e);
+                console.error("Failed to refresh accounts:", e);
             }
         }
 
+        function updateSystemMetrics() {
+            if (!accounts || accounts.length === 0) return;
+            const total = accounts.reduce((sum, a) => sum + parseFloat(a.balance || 0), 0);
+            const liqEl = document.getElementById('totalLiquidityDisplay');
+            if (liqEl) liqEl.innerText = '$' + total.toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            const accEl = document.getElementById('accountCountDisplay');
+            if (accEl) accEl.innerText = accounts.length;
+        }
+
         async function seedDemoAccounts() {
-            logConsole("Seeding demo accounts in PostgreSQL...", "info");
+            logConsole("Seeding demo accounts via API...", "info");
             try {
-                // Create Alice
                 const r1 = await fetch('/api/v1/accounts', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({accountHolderName: "Alice Smith", email: "alice@bank.com", initialDeposit: 5000.00, currency: "USD"})
+                    body: JSON.stringify({accountHolderName: "Alice Smith", email: "alice@apexbank.com", initialDeposit: 5000.00, currency: "USD"})
                 });
                 const d1 = await r1.json();
 
-                // Create Bob
                 const r2 = await fetch('/api/v1/accounts', {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({accountHolderName: "Bob Jones", email: "bob@bank.com", initialDeposit: 500.00, currency: "USD"})
+                    body: JSON.stringify({accountHolderName: "Bob Jones", email: "bob@apexbank.com", initialDeposit: 2500.00, currency: "USD"})
                 });
                 const d2 = await r2.json();
 
-                accounts = [d1.data, d2.data];
-                populateAccountSelects();
-                renderAccountsList();
+                if (!d1 || !d1.data || !d2 || !d2.data) {
+                    logConsole("Failed to seed: " + (d1?.message || d2?.message || "Server error"), "error");
+                    return;
+                }
                 logConsole(`Created Alice (${d1.data.id.substring(0,8)}... Bal: $${d1.data.balance}) and Bob (${d2.data.id.substring(0,8)}... Bal: $${d2.data.balance})`, "success");
+                await refreshAccountsViaAjax();
                 loadLedgerForAccount(d1.data.id);
             } catch (e) {
                 logConsole("Failed to seed accounts: " + e.message, "error");
@@ -400,25 +391,37 @@
         }
 
         function populateAccountSelects() {
+            if (accounts.length === 0) return;
             const src = document.getElementById('sourceAccountSelect');
             const tgt = document.getElementById('targetAccountSelect');
+            const prevSrc = src.value;
+            const prevTgt = tgt.value;
+
             src.innerHTML = '';
             tgt.innerHTML = '';
 
-            accounts.forEach((acc, idx) => {
-                const opt1 = new Option(`${acc.accountHolderName} ($${acc.balance})`, acc.id);
-                const opt2 = new Option(`${acc.accountHolderName} ($${acc.balance})`, acc.id);
+            accounts.forEach((acc) => {
+                const opt1 = new Option(`${acc.accountHolderName} ($${Number(acc.balance).toFixed(2)})`, acc.id);
+                const opt2 = new Option(`${acc.accountHolderName} ($${Number(acc.balance).toFixed(2)})`, acc.id);
                 src.add(opt1);
                 tgt.add(opt2);
             });
 
-            // Add Blacklisted Destination
+            // Add Blacklisted Destination for testing fraud block
             tgt.add(new Option("🚨 ACC-BLACK-9999 (Sanctioned Mule)", "ACC-BLACK-9999"));
 
-            if (src.options.length > 1) tgt.selectedIndex = 1;
+            if (prevSrc && Array.from(src.options).some(o => o.value === prevSrc)) {
+                src.value = prevSrc;
+            }
+            if (prevTgt && Array.from(tgt.options).some(o => o.value === prevTgt)) {
+                tgt.value = prevTgt;
+            } else if (tgt.options.length > 1) {
+                tgt.selectedIndex = 1;
+            }
         }
 
         function renderAccountsList() {
+            if (accounts.length === 0) return;
             const container = document.getElementById('accountsList');
             container.innerHTML = accounts.map(a => `
                 <div class="p-2.5 bg-slate-900/80 rounded-xl border border-slate-800 flex justify-between items-center cursor-pointer hover:border-cyan-500/50 transition" onclick="loadLedgerForAccount('${a.id}')">
@@ -446,43 +449,56 @@
             }
         }
 
+        async function loadRecentLedgers() {
+            try {
+                const res = await fetch('/api/v1/accounts/ledger/recent');
+                const data = await res.json();
+                if (data.success && data.data) {
+                    renderLedger(data.data);
+                }
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
         function renderLedger(entries) {
             const tbody = document.getElementById('ledgerTableBody');
-            if (entries.length === 0) {
+            if (!entries || entries.length === 0) {
                 tbody.innerHTML = `<tr><td colspan="6" class="py-4 text-center text-slate-500">No ledger entries</td></tr>`;
                 return;
             }
             tbody.innerHTML = entries.map(e => `
-                <tr class="hover:bg-slate-800/30">
+                <tr class="hover:bg-slate-800/30 transition">
                     <td class="py-2.5 font-mono text-slate-400">${e.accountId.substring(0,8)}...</td>
                     <td class="py-2.5 font-bold ${e.entryType === 'COMPENSATION' ? 'text-amber-400' : (e.entryType === 'DEBIT' ? 'text-rose-400' : 'text-emerald-400')}">${e.entryType}</td>
                     <td class="py-2.5 font-bold">$${Number(e.amount).toFixed(2)}</td>
                     <td class="py-2.5 text-slate-400">$${Number(e.balanceBefore).toFixed(2)}</td>
                     <td class="py-2.5 font-bold text-slate-200">$${Number(e.balanceAfter).toFixed(2)}</td>
-                    <td class="py-2.5 text-slate-400 text-[11px] truncate max-w-[150px]">${e.description}</td>
+                    <td class="py-2.5 text-slate-400 text-[11px] truncate max-w-[180px]">${e.description}</td>
                 </tr>
             `).join('');
         }
 
         function setScenario(type) {
-            if (accounts.length < 2) {
-                alert("Please click 'Seed Demo Accounts' first!");
-                return;
-            }
             const src = document.getElementById('sourceAccountSelect');
             const tgt = document.getElementById('targetAccountSelect');
             const amt = document.getElementById('transferAmount');
 
+            if (src.options.length === 0) {
+                alert("Please wait for accounts to load or click Seed Demo Accounts!");
+                return;
+            }
+
             src.selectedIndex = 0;
 
             if (type === 'clean') {
-                tgt.selectedIndex = 1;
+                if (tgt.options.length > 1) tgt.selectedIndex = 1;
                 amt.value = "250.00";
             } else if (type === 'high_amount') {
-                tgt.selectedIndex = 1;
+                if (tgt.options.length > 1) tgt.selectedIndex = 1;
                 amt.value = "15000.00";
             } else if (type === 'velocity') {
-                tgt.selectedIndex = 1;
+                if (tgt.options.length > 1) tgt.selectedIndex = 1;
                 amt.value = "50.00";
                 logConsole("Triggering burst velocity test (4 rapid transactions)...", "warn");
                 triggerVelocityBurst();
@@ -497,14 +513,14 @@
             for (let i = 1; i <= 4; i++) {
                 logConsole(`Burst Transfer #${i} dispatched...`, "info");
                 await executeTransfer();
-                await new Promise(r => setTimeout(r, 400));
+                await new Promise(r => setTimeout(r, 350));
             }
         }
 
         function resetStepper() {
             ['step-idempotency', 'step-fraud', 'step-debit', 'step-credit'].forEach(id => {
                 const el = document.getElementById(id);
-                el.className = "p-3 rounded-2xl bg-slate-900/60 border border-slate-800 transition";
+                if (el) el.className = "p-3 rounded-2xl bg-slate-900/60 border border-slate-800 transition";
             });
         }
 
@@ -540,12 +556,10 @@
             const startTime = performance.now();
             const idemKey = "idem-" + Date.now() + "-" + Math.random().toString(36).substring(7);
 
-            // Step 1: Idempotency
             activateStep('step-idempotency', 'active');
             logConsole(`[SAGA STEP 1] Checking Idempotency Key in Redis: ${idemKey}`, 'info');
 
             try {
-                // Call API Gateway /api/v1/transfers
                 const res = await fetch('/api/v1/transfers', {
                     method: 'POST',
                     headers: {
@@ -608,7 +622,8 @@
                 }
 
                 // Refresh accounts and ledger
-                seedRefresh();
+                await refreshAccountsViaAjax(false);
+                loadLedgerForAccount(src);
 
             } catch (e) {
                 logConsole("Transfer execution error: " + e.message, 'error');
@@ -616,7 +631,6 @@
         }
 
         async function showOtpModal(txId) {
-            // Generate OTP for this tx
             try {
                 const res = await fetch(`/api/v1/fraud/generate-otp?transactionId=${txId}`, {method: 'POST'});
                 const data = await res.json();
@@ -657,7 +671,9 @@
                     badge.className = "px-3 py-1 bg-emerald-500/20 text-emerald-400 rounded-full text-xs font-semibold";
                     badge.innerText = "SAGA COMPLETED (SUCCESS)";
                     logConsole(`[OTP VERIFIED] SAGA resumed and completed successfully!`, 'success');
-                    seedRefresh();
+                    await refreshAccountsViaAjax(false);
+                    const src = document.getElementById('sourceAccountSelect').value;
+                    if (src) loadLedgerForAccount(src);
                 } else {
                     logConsole(`[OTP FAILED] Invalid OTP. SAGA remains halted.`, 'error');
                 }
@@ -666,16 +682,10 @@
             }
         }
 
-        async function seedRefresh() {
-            const src = document.getElementById('sourceAccountSelect').value;
-            if (src) {
-                loadLedgerForAccount(src);
-            }
-        }
-
         async function loadNotifications() {
             try {
                 const res = await fetch('/api/v1/notifications');
+                if (!res.ok) return;
                 const data = await res.json();
                 if (data.success && data.data && data.data.length > 0) {
                     const c = document.getElementById('notificationsContainer');

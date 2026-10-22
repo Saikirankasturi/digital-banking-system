@@ -221,6 +221,25 @@ public class AccountService {
         return ledgerRepository.findByAccountIdOrderByCreatedAtDesc(accountId);
     }
 
+    @Transactional(readOnly = true)
+    public List<AccountDto> getAllAccounts() {
+        return accountRepository.findAll().stream()
+                .map(this::mapToDto)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<LedgerEntry> getAllRecentLedgerEntries() {
+        return ledgerRepository.findTop50ByOrderByCreatedAtDesc();
+    }
+
+    @Transactional(readOnly = true)
+    public BigDecimal getTotalLiquidity() {
+        return accountRepository.findAll().stream()
+                .map(Account::getBalance)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
     private void recordLedgerEntry(String accountId, String transactionId, TransactionType type,
                                    BigDecimal amount, BigDecimal balanceBefore, BigDecimal balanceAfter,
                                    String description) {
